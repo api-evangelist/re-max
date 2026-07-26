@@ -1,0 +1,135 @@
+aid: re-max
+url: https://raw.githubusercontent.com/api-evangelist/re-max/refs/heads/main/apis.yml
+name: RE/MAX
+kind: company
+description: >-
+  RE/MAX Holdings, Inc. (NYSE: RMAX, SIC 6531, Denver, Colorado) is one of the
+  world's largest real estate brokerage franchisors, licensing the RE/MAX brand
+  to independently owned and operated brokerages across more than 110 countries
+  and territories, and franchising mortgage brokerages in the United States
+  under the Motto Mortgage brand with loan processing through wemlo. Its home
+  market is the United States, where it sits in the value chain as a franchisor
+  and consumer portal operator rather than as a data owner: the listing content
+  behind remax.com is licensed from roughly 500 local Multiple Listing Services
+  under IDX and syndication agreements, so RE/MAX is a consumer of MLS data, not
+  a publisher of it. Its API posture reflects that position honestly. RE/MAX is
+  a RESO Class D member (Brokers, Agents and Appraisers) and holds a seat on the
+  RESO Board of Directors, but it does not appear in the RESO certification
+  directory of certified data providers and publishes no RESO Web API, no OData
+  $metadata document and no Universal Property Identifier surface. In the United
+  States there is no developer portal, no published API program and no
+  machine-readable contract of any kind; developer.remax.com, developers.remax.com
+  and docs.remax.com are only wildcard DNS entries pointing at the kvCORE agent
+  website platform, and api.remax.com is a dangling CNAME to a decommissioned
+  booj host that no longer resolves. The only real, publicly documented RE/MAX
+  API surface belongs to RE/MAX Europe, whose Datahub franchise-operations API
+  and Listings API are published as public Postman documentation with OAuth 2.0
+  authentication, but whose credentials are issued only to RE/MAX regional master
+  franchisees, offices and their vendors — documented, but not self-serve.
+accessModel:
+  pricing: unknown
+  onboarding: partner-only
+  trial: false
+  try_now: false
+  public: false
+  label: Partner-only · Franchise/vendor credentials required
+  confidence: high
+  source:
+  - collections
+  - authentication
+  generated: '2026-07-26'
+  method: manual
+image: https://kinlane-images.s3.amazonaws.com/shared/apis-json/icons/groq.png
+tags:
+- Real Estate
+- United States
+- Brokerage
+- Property Listings
+- MLS
+- RESO
+- IDX
+- PropTech
+- Franchising
+- Mortgage
+- Rentals
+created: '2026-07-26'
+modified: '2026-07-26'
+specificationVersion: '0.19'
+apis:
+- aid: re-max:re-max-eu-datahub-api
+  name: RE/MAX Europe Datahub API
+  description: >-
+    The RE/MAX Europe Datahub API is the franchise-operations API behind the
+    RE/MAX EU Datahub application. It exposes offices, persons, RE/MAX Titles
+    (the agent/broker role records), teams, regions and monthly GCI /
+    transaction / volume reporting to RE/MAX regional master franchisees and
+    their vendors. It is a proprietary REST contract — it carries no RESO Data
+    Dictionary fields, no OData surface and no Universal Property Identifier.
+    Authentication is OAuth 2.0 against https://oauth.datahub.remax.eu, with the
+    resulting token passed as an access_token query parameter; the published
+    Postman documentation carries the client_id placeholder "Ask_REU",
+    confirming credentials are handed out by RE/MAX Europe rather than
+    self-served. Documentation is public; access is not.
+  humanURL: https://apidocs.datahub.remax.eu/
+  baseURL: https://api.datahub.remax.eu/external
+  tags:
+  - Franchising
+  - Offices
+  - Agents
+  - Teams
+  - Reporting
+  - Europe
+  properties:
+  - type: Documentation
+    url: https://apidocs.datahub.remax.eu/
+  - type: PostmanCollection
+    url: collections/re-max-eu-datahub-api.postman_collection.json
+  - type: Authentication
+    url: https://oauth.datahub.remax.eu/authorize
+- aid: re-max:re-max-eu-listings-api
+  name: RE/MAX Europe Listings API
+  description: >-
+    The RE/MAX Europe Listings API is used in conjunction with the RE/MAX EU
+    Datahub application to add, update, retrieve and delete property listing
+    data and listing images across RE/MAX European regions. It exposes listings,
+    listing images, listing entry logs, regions, offices and agents, plus
+    unauthenticated-looking convenience reads for listing countries and cities
+    by country. Writes go through a queue with deferred validation. Like the
+    Datahub API it is a proprietary REST schema with no RESO Data Dictionary
+    alignment, no OData $metadata and no UPI. Authentication is OAuth 2.0 with
+    the token supplied as an access_token query parameter. The only public
+    documentation RE/MAX Europe publishes is for the STAGING environment, whose
+    endpoints run on a third-party host (bwscloud.tech); no production base URL
+    is published.
+  humanURL: https://listingsapi-test.datahub.remax.eu/
+  baseURL: https://listing-api-remaxeu.bwscloud.tech/api/v1
+  tags:
+  - Property Listings
+  - Images
+  - Regions
+  - Agents
+  - Europe
+  - Staging
+  properties:
+  - type: Documentation
+    url: https://listingsapi-test.datahub.remax.eu/
+  - type: PostmanCollection
+    url: collections/re-max-eu-listings-api.postman_collection.json
+common:
+- type: Website
+  url: https://www.remax.com/
+- type: Website
+  url: https://www.remax.eu/
+- type: Blog
+  url: https://news.remax.com/
+- type: InvestorRelations
+  url: https://investors.remaxholdings.com/
+- type: LinkedIn
+  url: https://www.linkedin.com/company/remax
+- type: Documentation
+  url: https://apidocs.datahub.remax.eu/
+- type: Authentication
+  url: https://oauth.datahub.remax.eu/token
+maintainers:
+- FN: Kin Lane
+  email: kin@apievangelist.com

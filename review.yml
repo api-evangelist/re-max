@@ -1,0 +1,471 @@
+aid: re-max
+name: RE/MAX
+slug: re-max
+reviewer: API Evangelist
+reviewed: '2026-07-26'
+sector: Real Estate
+tier: brokerage
+homeMarket: United States
+primaryDomain: remax.com
+
+review:
+  question: >-
+    Does RE/MAX publish a real, reachable, machine-readable API surface — and is
+    it RESO-certified, RESO-adjacent, or neither?
+  answer: >-
+    Partly. RE/MAX Holdings (United States) publishes no developer portal, no API
+    program and no machine-readable contract of any kind. The only genuinely
+    public RE/MAX API documentation belongs to RE/MAX Europe: two Postman-published
+    collections (Datahub franchise operations, and a STAGING Listings API), both
+    OAuth 2.0, both credential-gated to RE/MAX regional franchisees and their
+    vendors. Neither is RESO-shaped. RE/MAX is a RESO member with a board seat but
+    is not a RESO-certified data provider.
+
+identity:
+  legalName: RE/MAX Holdings, Inc.
+  ticker: RMAX
+  exchange: NYSE
+  sec:
+    cik: '0001581091'
+    sic: '6531'
+    sicDescription: Real Estate Agents & Managers (For Others)
+    stateOfIncorporation: CO
+    source: https://data.sec.gov/submissions/CIK0001581091.json
+    httpStatus: 200
+    fetched: '2026-07-26'
+  headquarters: 5075 South Syracuse Street, Denver, CO 80237, United States
+  model: >-
+    Brokerage franchisor. RE/MAX licenses its brand to independently owned and
+    operated brokerages; it does not own the listing data its portal displays.
+    Also franchises US mortgage brokerages under Motto Mortgage, with third-party
+    loan processing via wemlo.
+  pendingCorporateAction: >-
+    On 2026-04-26 RE/MAX Holdings entered an Arrangement Agreement and Plan of
+    Merger with The Real Brokerage Inc. to form a new Nasdaq-listed holding
+    company, Real REMAX Group, valued at approximately USD 880 million; the SEC
+    filing history for CIK 0001581091 shows a continuous stream of Form 425 /
+    DEFM14A / DEFA14A merger communications from 2026-05-11 through 2026-07-14.
+    Close expected in H2 2026. Recorded here because it may change this
+    provider's identity and any future API posture.
+
+# =====================================================================
+# THE POINT OF THE EXERCISE: RESO POSTURE vs ACCESS GATE vs OPEN DATA
+# Two separate facts. Neither implies the other.
+# =====================================================================
+resoAndAccess:
+
+  resoPosture:
+    summary: >-
+      RESO member (Class D broker) with a board seat, but NOT a RESO-certified
+      data provider and no RESO/OData/UPI surface anywhere in its published APIs.
+    certified: false
+    webApiCertification: none
+    dataDictionaryCertification: none
+    dataDictionaryVersion: null
+    uoi: null
+    metadataDocument: none
+    universalPropertyIdentifier: >-
+      No UPI reference found. Zero occurrences of "UPI" or "Universal Property
+      Identifier" in either harvested RE/MAX collection.
+    odataSurface: >-
+      None. Zero occurrences of "OData", "$metadata", "RESO" or "Data Dictionary"
+      in either harvested RE/MAX collection (grep run 2026-07-26 over both saved
+      Postman documents).
+    membershipEvidence:
+      - url: https://www.reso.org/membership/
+        httpStatus: 200
+        fetched: '2026-07-26'
+        finding: >-
+          "RE/MAX" appears verbatim in the "Brokers, Agents and Appraisers
+          (Class D Members)" column, alongside Anywhere, Douglas Elliman,
+          HouseCanary, NextHome, Opendoor, Redfin and Xome. This is a
+          membership list, not a certification list.
+    certificationDirectoryEvidence:
+      - url: https://www.reso.org/certificates/
+        httpStatus: 200
+        fetched: '2026-07-26'
+        bytes: 416233
+        finding: >-
+          The RESO certification directory page enumerates 576 certified "Data
+          Providers" (each with a UOI, e.g. "Alaska Multiple Listing Service
+          UOI: M00000001") and 578 distinct certification.reso.org/summary/*
+          detail links. A case-insensitive regex for "re ?/? ?max" over the full
+          416KB document returns ZERO matches. RE/MAX is not a certified data
+          provider. The certified entities are MLSs, REALTOR associations and
+          technology vendors — the parties that actually hold the data.
+      - url: https://certification.reso.org/
+        httpStatus: 400
+        fetched: '2026-07-26'
+        finding: >-
+          The live RESO certification reporting system returned HTTP 400 to an
+          anonymous GET and served no body; could not be queried directly.
+    boardEvidence:
+      - source: RESO 2026 Board of Directors announcement
+        finding: >-
+          Joe Wilhelmy, VP of Business Technology at RE/MAX, serves on the 2026
+          RESO Board of Directors. RE/MAX has held RESO board representation
+          since at least 2023 (Dan Troup, announced 2023-01). Governance
+          participation, not certification.
+    interpretation: >-
+      This is the sector's central distinction in its cleanest form. RESO is the
+      only industry-body-mandated machine-readable contract in this entire study,
+      and RE/MAX — one of the largest brokerage brands on earth — sits on its
+      board while shipping nothing RESO-shaped and holding no certification. The
+      certified endpoints belong to the ~500 MLSs. RE/MAX is downstream of them,
+      licensing IDX feeds into a consumer portal.
+
+  accessGate:
+    value: partner-only
+    whatADeveloperMustSignOrJoin: >-
+      For the only documented APIs (RE/MAX Europe Datahub and Listings), a
+      developer must be — or be engaged by — a RE/MAX Europe regional master
+      franchisee or a RE/MAX office, and must obtain OAuth 2.0 client
+      credentials directly from RE/MAX Europe. The published Postman
+      documentation ships the client_id placeholder value "Ask_REU" (ask RE/MAX
+      Europe), which is the whole onboarding process. There is no signup form,
+      no key-request page, no application flow, no published pricing, no terms
+      of service for API use, and no rate-limit documentation. For the United
+      States there is nothing to apply for at all — no program exists.
+    selfServe: false
+    publicDocsReadableAnonymously: true
+    keysObtainableAnonymously: false
+    usArmGate: none-published
+
+  openData:
+    value: false
+    finding: >-
+      RE/MAX publishes no open, unlicensed, publicly callable dataset. The
+      listing content on remax.com is licensed MLS content displayed under IDX /
+      syndication agreements. remax.com/robots.txt explicitly disallows /api/,
+      /v2/ and /feature-flags/ to all user agents while allowing the sitemap
+      index files, which is a search-indexing posture, not a data-sharing one.
+
+  authModel:
+    scheme: OAuth 2.0 (authorization code)
+    authorizationEndpoint: https://oauth.datahub.remax.eu/authorize
+    tokenEndpoint: https://oauth.datahub.remax.eu/token
+    tokenTransport: >-
+      access_token passed as a URL QUERY PARAMETER on every request (not an
+      Authorization header). Noted as a security-relevant design choice: tokens
+      land in logs, referrers and browser history.
+    openidConnectDiscovery: >-
+      Not served. https://oauth.datahub.remax.eu/.well-known/openid-configuration
+      returned 404 and .well-known/oauth-authorization-server returned 404
+      (anonymous GET, 2026-07-26). This is OAuth 2.0 without OIDC discovery.
+    scopes: >-
+      No scope values are published. The Postman auth config carries the literal
+      placeholder "<scope>". No scope vocabulary could be recorded without
+      fabricating one.
+    apiKeys: none documented
+    mtls: none documented
+
+# =====================================================================
+# PROBE LOG — every URL touched, with HTTP status, 2026-07-26
+# =====================================================================
+probes:
+  usCorporateAndPortalSearch:
+    - url: https://www.remax.com/
+      status: 200
+      note: >-
+        Live consumer portal on CloudFront. Repeat requests later in the session
+        returned HTTP 202 with a zero-byte body and header
+        "x-amzn-waf-action: challenge" — the site is behind AWS WAF and
+        rate-limits automated clients. WebFetch received 403.
+    - url: https://remax.com/
+      status: 200
+    - url: https://www.remax.com/robots.txt
+      status: 200
+      note: >-
+        Disallows /api/, /v2/, /feature-flags/ for all agents; lists 15 sitemap
+        index files (forsale, forrent, agents, offices, neighborhoods, land,
+        condo, mobile-homes, townhome, open-house, etc).
+    - url: https://www.remax.com/developers
+      status: 404
+      note: Real 404 on first probe; later 202 WAF challenge.
+    - url: https://www.remax.com/api-docs
+      status: 404
+      note: Real 404 HTML page, 51,469 bytes.
+    - url: https://www.remax.com/api
+      status: 200
+      note: Empty body; robots-disallowed internal path, not a documented API.
+    - url: https://www.remax.com/docs
+      status: 202
+      note: AWS WAF challenge, zero-byte body. Inconclusive but no spec served.
+    - url: https://www.remax.com/openapi.json
+      status: 202
+      note: AWS WAF challenge, zero-byte body. No OpenAPI document served.
+    - url: https://www.remax.com/swagger.json
+      status: 202
+      note: AWS WAF challenge, zero-byte body. No Swagger document served.
+    - url: https://www.remax.com/$metadata
+      status: 202
+      note: AWS WAF challenge, zero-byte body. No OData metadata document served.
+    - url: https://www.remax.com/.well-known/openid-configuration
+      status: 202
+      note: AWS WAF challenge, zero-byte body.
+    - url: https://www.remax.com/.well-known/security.txt
+      status: 404
+    - url: https://www.remax.com/llms.txt
+      status: 404
+    - url: https://www.remax.com/feeds
+      status: 404
+    - url: https://www.remax.com/data
+      status: 404
+    - url: https://www.remax.com/sitemap.xml
+      status: 403
+    - url: https://investors.remaxholdings.com/
+      status: 403
+      note: >-
+        Real host, Cloudflare bot challenge (cf-mitigated: challenge). Not
+        fetchable anonymously.
+    - url: https://news.remax.com/
+      status: 200
+      note: RE/MAX corporate newsroom. Live, fetchable.
+    - url: https://global.remax.com/
+      status: 200
+      note: Serves a "Security Check / Verifying your connection" interstitial.
+
+  usSubdomainProbes:
+    finding: >-
+      CRITICAL — remax.com serves a DNS WILDCARD. The control probe
+      zzzznotreal.remax.com resolves to exactly the same target as
+      developer.remax.com, developers.remax.com and docs.remax.com
+      (CNAME customers.kvcore.com, behind Cloudflare). Those three hostnames are
+      therefore NOT developer portals; they are wildcard artifacts pointing at
+      the kvCORE agent-website platform (Inside Real Estate), which RE/MAX
+      adopted as "MAX/Tech powered by kvCORE". A 403 here is a Cloudflare
+      challenge for a site that does not exist, not a gated portal.
+    hosts:
+    - url: https://developer.remax.com/
+      status: 403
+      dns: CNAME customers.kvcore.com
+      verdict: wildcard, not a portal
+    - url: https://developers.remax.com/
+      status: 403
+      dns: CNAME customers.kvcore.com
+      verdict: wildcard, not a portal
+    - url: https://docs.remax.com/
+      status: 403
+      dns: CNAME customers.kvcore.com
+      verdict: wildcard, not a portal
+    - url: https://zzzznotreal.remax.com/
+      status: n/a
+      dns: CNAME customers.kvcore.com
+      verdict: CONTROL PROBE — proves the wildcard
+    - url: https://api.remax.com/
+      status: 000
+      dns: >-
+        CNAME api.remax-prod.booj.io — which returns NXDOMAIN. This is a DANGLING
+        CNAME. booj was the in-house RE/MAX technology platform (acquired 2018,
+        products sunset around mid-2023 when RE/MAX moved to kvCORE); the DNS
+        record outlived the service. api.remax.com does not resolve and cannot be
+        called.
+      verdict: dangling CNAME to a decommissioned host
+
+  euDeveloperSurface:
+    finding: >-
+      remax.eu has NO wildcard (zzzznotreal.remax.eu and
+      zzzznotreal.datahub.remax.eu both fail to resolve), so every hostname below
+      is a deliberately created record. These are real, intentional, publicly
+      published API documentation endpoints.
+    hosts:
+    - url: https://apidocs.datahub.remax.eu/
+      status: 200
+      dns: CNAME phs.getpostman.com (Postman custom-domain documentation hosting)
+      note: >-
+        RE/MAX-branded Postman Documenter site. collection-info-public=true.
+        Collection published 2023-10-05. This is the real developer portal.
+    - url: https://listingsapi-test.datahub.remax.eu/
+      status: 200
+      dns: CNAME phs.getpostman.com
+      note: >-
+        "RE/MAX EU - Listings API - Staging" Postman documentation, published
+        2026-05-21. Note that only the STAGING environment is documented.
+    - url: https://listingsapi.datahub.remax.eu/
+      status: 000
+      note: Does not resolve. No production Listings API docs are published.
+    - url: https://datahub.remax.eu/
+      status: 200
+      dns: CNAME remaxeu-1728961475.eu-south-1.elb.amazonaws.com
+      note: The RE/MAX EU Datahub member application itself (AWS eu-south-1).
+    - url: https://api.datahub.remax.eu/
+      status: 400
+      note: Live API host, rejects an unauthenticated root GET.
+    - url: https://api.datahub.remax.eu/external/regions/
+      status: 400
+      note: Live, rejects the call without an access_token. Correctly gated.
+    - url: https://oauth.datahub.remax.eu/authorize
+      status: 200
+      note: Live OAuth authorization endpoint.
+    - url: https://oauth.datahub.remax.eu/token
+      status: 404 (GET) / 400 (POST)
+      note: Live token endpoint; rejects a malformed anonymous POST with 400.
+    - url: https://oauth.datahub.remax.eu/.well-known/openid-configuration
+      status: 404
+    - url: https://oauth.datahub.remax.eu/.well-known/oauth-authorization-server
+      status: 404
+    - url: https://apidocs.datahub.remax.eu/openapi.json
+      status: 404
+    - url: https://apidocs.datahub.remax.eu/openapi.yaml
+      status: 404
+    - url: https://apidocs.datahub.remax.eu/swagger.json
+      status: 404
+    - url: https://apidocs.datahub.remax.eu/api-docs
+      status: 404
+
+  resoProbes:
+    - url: https://www.reso.org/certificates/
+      status: 200
+    - url: https://www.reso.org/membership/
+      status: 200
+    - url: https://www.reso.org/reso-members/
+      status: 200
+      note: No RE/MAX match on this page.
+    - url: https://www.reso.org/members/
+      status: 404
+    - url: https://certification.reso.org/
+      status: 400
+    - url: https://certification.reso.org/api/v1/certification/summary
+      status: 400
+      note: Speculative path, not documented. Recorded for completeness.
+
+  otherProbes:
+    - url: https://api.github.com/orgs/remax
+      status: 404
+    - url: https://api.github.com/orgs/booj
+      status: 404
+    - url: https://api.github.com/orgs/Remax-Tech
+      status: 200
+      verdict: >-
+        NOT RE/MAX. Created 2025-07-29 by an unrelated user; its three public
+        repos are "portfolio", "payroll-system" and "Bar-mgnt". No name, blog or
+        description. Explicitly rejected as a RE/MAX artifact.
+    - source: Postman public search for "remax"
+      status: 200
+      verdict: >-
+        No official RE/MAX public workspace. Top hit is an unrelated user
+        workspace named "remax test". The only official RE/MAX Postman presence
+        is the two custom-domain Documenter sites on datahub.remax.eu.
+
+# =====================================================================
+harvest:
+  openapi:
+    harvested: false
+    count: 0
+    note: >-
+      No OpenAPI, Swagger, AsyncAPI, GraphQL schema or OData $metadata document
+      exists anywhere in the RE/MAX estate. Every candidate path was probed and
+      returned 404 or a WAF challenge with a zero-byte body. The openapi/
+      directory is deliberately absent rather than empty.
+  collections:
+    harvested: true
+    count: 2
+    format: Postman Collection v2.0
+    items:
+      - path: collections/re-max-eu-datahub-api.postman_collection.json
+        name: API docs (RE/MAX EU Datahub)
+        sourceURL: >-
+          https://apidocs.datahub.remax.eu/api/collections/29687718/2s9YJdWNK2?environment=29687718-29bf463b-74bd-4a30-94b6-cc1cf9a4a740&segregateAuth=true&versionTag=latest
+        httpStatus: 200
+        fetched: '2026-07-26'
+        bytes: 103047
+        publishDate: '2023-10-05T13:50:26.000Z'
+        public: true
+        parsed: true
+        operations: 52
+        folders:
+          - Reporting - GCI, Transactions and Volume
+          - Office
+          - Person
+          - RE/MAX Title
+          - User
+          - Miscellaneous
+          - Teams
+        baseHost: api.datahub.remax.eu/external
+        auth: >-
+          oauth2, authUrl https://oauth.datahub.remax.eu/authorize, accessTokenUrl
+          https://oauth.datahub.remax.eu/token, clientId placeholder "Ask_REU"
+        redactions: none required
+      - path: collections/re-max-eu-listings-api.postman_collection.json
+        name: RE/MAX EU - Listings API - Staging
+        sourceURL: >-
+          https://listingsapi-test.datahub.remax.eu/api/collections/29687718/2sA3drJF17?environment=29687718-4b1bd698-a858-4d33-b338-6a38f1eb61a8&segregateAuth=true&versionTag=latest
+        httpStatus: 200
+        fetched: '2026-07-26'
+        bytes: 95170
+        publishDate: '2026-05-21T08:20:53.000Z'
+        public: true
+        parsed: true
+        operations: 35
+        baseHost: listing-api-remaxeu.bwscloud.tech/api/v1
+        auth: >-
+          oauth2 against oauth.pre-prod.remaxeu-datahub.bwscloud.tech, token
+          passed as an access_token query parameter
+        redactions: >-
+          SECURITY — the published collection embedded a live-looking 128-character
+          hexadecimal staging access_token in 4 request URLs. All 4 occurrences
+          were replaced with "REDACTED-BY-API-EVANGELIST" before the file was
+          saved to this repo. The document still parses as valid JSON. Reported
+          here rather than reproduced. RE/MAX Europe should rotate it.
+
+apiFamily:
+  segmentationAsTheDocsUseIt:
+    - segment: Franchise operations (offices, persons, RE/MAX Titles, teams, regions)
+      surface: RE/MAX Europe Datahub API
+      note: >-
+        The dominant surface. This is a franchise-network membership and
+        role-management API, not a property API. It includes
+        /external/personBySSN/:SSNnumber — person lookup by social security
+        number — which is a notable amount of PII reach for a partner API.
+    - segment: Financial reporting (GCI, transactions, volume)
+      surface: RE/MAX Europe Datahub API — /external/reporting/...
+      note: Monthly per-office and per-person commission and volume reporting.
+    - segment: Listings and listing media
+      surface: RE/MAX Europe Listings API (staging only)
+      note: >-
+        Full CRUD over listings plus image add/replace/describe/delete, listing
+        entry logs, and lookups for regions, offices, agents, listing countries
+        and cities by country. Proprietary schema; NOT RESO Data Dictionary.
+    - segment: Property records / valuation / AVM / title / escrow / transactions / documents / tenancy / payments
+      surface: none
+      note: >-
+        RE/MAX publishes no API in any of these categories. Motto Mortgage and
+        wemlo (its US mortgage brands) publish no developer surface either.
+  webhooks: none documented
+  events: none documented
+  asyncapi: none
+  graphql: none
+  sdks: none published
+  cli: none published
+  postman: >-
+    Yes — two custom-domain Postman Documenter sites are the entire developer
+    experience. There is no Run-in-Postman public workspace.
+  changelog: none published
+  status page: none found
+  ratePlans: none published
+  rateLimits: none documented
+
+conclusions:
+  developerPortal: https://apidocs.datahub.remax.eu/
+  portalConfirmed: true
+  portalCaveat: >-
+    Confirmed live at 200 and freely readable without login — but it belongs to
+    RE/MAX Europe, not the United States home market, and it grants no
+    credentials. It is documentation without onboarding.
+  gated: true
+  accessGate: partner-only
+  openData: false
+  resoCertified: false
+  resoPosture: >-
+    RESO Class D member with a board seat; NOT in the RESO certification
+    directory; no Web API or Data Dictionary endorsement; no $metadata, no
+    OData, no UPI in any published artifact.
+  sectorLesson: >-
+    RE/MAX is the clean counter-example to the assumption that RESO membership
+    implies a reachable contract. It sits on the standards board that governs the
+    only mandated machine-readable contract in real estate, and ships none of it.
+    Its US surface is a WAF-protected consumer portal with a dangling api.
+    subdomain and a wildcard that makes three non-existent developer hostnames
+    answer on port 443. Its one real API programme lives in Europe, is
+    proprietary rather than RESO-shaped, documents only its staging environment,
+    and hands out credentials by asking.
