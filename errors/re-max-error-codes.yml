@@ -1,0 +1,83 @@
+generated: '2026-07-26'
+method: searched
+source:
+- live anonymous probes of https://api.datahub.remax.eu/external/*, 2026-07-26
+- live anonymous probes of https://www.remax.eu/wp-json/*, 2026-07-26
+format: proprietary
+rfc9457: false
+note: >-
+  RE/MAX Europe publishes no error reference page and no machine-readable spec,
+  so this catalog is built from error responses observed live against the
+  production Datahub host and the remax.eu WordPress host. It is deliberately
+  short: only codes that were actually returned to an anonymous caller are
+  recorded. Authenticated-path error codes cannot be enumerated without
+  partner credentials.
+envelopes:
+- api: RE/MAX Europe Datahub API
+  host: https://api.datahub.remax.eu
+  shape: '{"status":[{"code":<int>,"message":"<string>"}],"result":{}}'
+  media_type: application/json
+  notes: >-
+    Errors are returned in a status[] array alongside an always-present result
+    object; there is no type URI, no title/detail split and no problem+json
+    media type, so this is not RFC 9457. The numeric code is a RE/MAX-internal
+    4xxx series that does not track the HTTP status (4007 is served with 400,
+    4004 with 403).
+- api: RE/MAX Europe Site API (WordPress REST)
+  host: https://www.remax.eu
+  shape: '{"code":"<slug>","message":"<string>","data":{"status":<int>}}'
+  media_type: application/json
+  notes: standard WordPress REST API error envelope, not a RE/MAX design
+errors:
+- api: RE/MAX Europe Datahub API
+  code: 4007
+  http_status: 400
+  message: Login parameter Required
+  meaning: the request carried no access_token query parameter
+  action: obtain an OAuth 2.0 token from https://oauth.datahub.remax.eu/token and pass it as access_token
+  observed:
+    url: https://api.datahub.remax.eu/external/regions/
+    status: 400
+    fetched: '2026-07-26'
+  note: >-
+    Returned for every path on the host, including paths that do not exist, so
+    the authentication gate runs ahead of routing and unauthenticated callers
+    cannot probe the route surface.
+- api: RE/MAX Europe Datahub API
+  code: 4004
+  http_status: 403
+  message: Invalid or expired Session/Token
+  meaning: an access_token was supplied but is not valid or has expired
+  action: re-run the authorization code flow and retry with a fresh token
+  observed:
+    url: https://api.datahub.remax.eu/external/regions/?access_token=invalidtoken123
+    status: 403
+    fetched: '2026-07-26'
+- api: RE/MAX Europe Site API (WordPress REST)
+  code: rest_forbidden
+  http_status: 401
+  message: Sorry, you are not allowed to do that.
+  meaning: the route requires an authenticated WordPress user
+  action: authenticate with a WordPress application password or session cookie
+  observed:
+    url: https://www.remax.eu/wp-json/wp-abilities/v1/abilities
+    status: 401
+    fetched: '2026-07-26'
+- api: RE/MAX Europe Site API (WordPress REST)
+  code: rest_forbidden
+  http_status: 401
+  message: You cannot view the feature list.
+  meaning: the JetEngine MCP tool list is restricted to authenticated users
+  action: authenticate; anonymous MCP tool discovery is not permitted
+  observed:
+    url: https://www.remax.eu/wp-json/jet-engine/v1/mcp-tools
+    status: 401
+    fetched: '2026-07-26'
+gaps:
+- no published error reference for either RE/MAX Europe API
+- no RFC 9457 problem+json anywhere in the estate
+- no Retry-After, rate-limit or quota error semantics documented
+- >-
+  the Listings API documents deferred validation (writes are queued and validated
+  later, surfaced through /listinglogs and /listinglogs/failed) but publishes no
+  catalog of the validation failures that surface there

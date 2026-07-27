@@ -1,0 +1,74 @@
+generated: '2026-07-26'
+method: searched
+source:
+- https://apidocs.datahub.remax.eu/
+- https://listingsapi-test.datahub.remax.eu/
+- live probes of status/trust subdomains, 2026-07-26
+- review.yml
+versioning:
+  datahub:
+    scheme: none
+    current: null
+    docs: https://apidocs.datahub.remax.eu/
+    note: the /external path carries no version segment and no version header
+  listings:
+    scheme: uri-path
+    current: v1
+    docs: https://listingsapi-test.datahub.remax.eu/
+deprecation:
+  policy_url: null
+  policy_published: false
+  sunset_header: false
+  deprecation_header: false
+  note: >-
+    No deprecation policy, no Sunset/Deprecation header support (RFC 8594) and no
+    notice period is published for either API.
+sla:
+  url: null
+  uptime_target: null
+  published: false
+status_page:
+  url: null
+  published: false
+  evidence:
+  - probe: https://status.remax.com/
+    status: 403
+    dns: CNAME customers.kvcore.com
+    verdict: >-
+      NOT a status page. status.remax.com resolves to the same kvCORE target as
+      the control probe zzzznotreal.remax.com, so it is a wildcard DNS artifact
+      behind Cloudflare, not a service RE/MAX operates. Recorded as absent.
+  - probe: https://trust.remax.com/
+    status: 403
+    dns: CNAME customers.kvcore.com
+    verdict: same wildcard artifact; no trust center exists
+changelog:
+  published: false
+  note: >-
+    Neither Postman documentation site carries a changelog or release notes. The
+    only version signal available is the Postman publish date on each collection.
+publication_history:
+- artifact: RE/MAX Europe Datahub API documentation
+  published: '2023-10-05T13:50:26.000Z'
+  source: collections/re-max-eu-datahub-api.postman_collection.json
+- artifact: RE/MAX EU Listings API (Staging) documentation
+  published: '2026-05-21T08:20:53.000Z'
+  source: collections/re-max-eu-listings-api.postman_collection.json
+retired_surfaces:
+- host: api.remax.com
+  state: dangling CNAME to api.remax-prod.booj.io, which returns NXDOMAIN
+  note: >-
+    booj was the in-house RE/MAX technology platform acquired in 2018 and sunset
+    around mid-2023 when RE/MAX moved to kvCORE. The DNS record outlived the
+    service; the hostname cannot be called. A lifecycle failure that is still
+    live in DNS.
+- host: developer.remax.com / developers.remax.com / docs.remax.com
+  state: wildcard DNS to customers.kvcore.com; never developer portals
+corporate_lifecycle:
+  pending_action: >-
+    RE/MAX Holdings entered an Arrangement Agreement and Plan of Merger with The
+    Real Brokerage Inc. on 2026-04-26 to form Real REMAX Group, a new
+    Nasdaq-listed holding company; close expected H2 2026. Any future API posture
+    may be set by the combined entity rather than by RE/MAX Holdings.
+  source: https://data.sec.gov/submissions/CIK0001581091.json
+deprecated_operations: []

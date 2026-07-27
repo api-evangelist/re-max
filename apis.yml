@@ -25,7 +25,13 @@ description: >-
   API surface belongs to RE/MAX Europe, whose Datahub franchise-operations API
   and Listings API are published as public Postman documentation with OAuth 2.0
   authentication, but whose credentials are issued only to RE/MAX regional master
-  franchisees, offices and their vendors — documented, but not self-serve.
+  franchisees, offices and their vendors — documented, but not self-serve. The
+  only anonymously callable, self-describing RE/MAX endpoint family found
+  anywhere in the estate is the WordPress REST API on the RE/MAX Europe
+  marketing site (remax.eu/wp-json, 42 namespaces and 791 routes), which also
+  exposes an auth-gated Model Context Protocol endpoint via the WordPress MCP
+  Adapter — a CMS surface rather than an API product, but the closest thing to
+  agent-accessible RE/MAX infrastructure that exists today.
 accessModel:
   pricing: unknown
   onboarding: partner-only
@@ -39,7 +45,7 @@ accessModel:
   - authentication
   generated: '2026-07-26'
   method: manual
-image: https://kinlane-images.s3.amazonaws.com/shared/apis-json/icons/groq.png
+image: https://remax.eu/wp-content/uploads/2026/03/REMAX-Balloon-RGB.svg
 tags:
 - Real Estate
 - United States
@@ -115,7 +121,73 @@ apis:
     url: https://listingsapi-test.datahub.remax.eu/
   - type: PostmanCollection
     url: collections/re-max-eu-listings-api.postman_collection.json
+  - type: Sandbox
+    url: sandbox/re-max-sandbox.yml
+- aid: re-max:re-max-eu-site-api
+  name: RE/MAX Europe Site API (WordPress REST)
+  description: >-
+    The RE/MAX Europe marketing site at remax.eu runs WordPress and exposes the
+    WordPress REST API anonymously at /wp-json/. The route descriptor published
+    there is the only self-describing, machine-readable, publicly callable
+    contract found anywhere in the RE/MAX estate: 42 namespaces and 791 routes,
+    each with its methods and argument definitions. Public content reads
+    (posts, pages, media, search, events, regions, newsroom and people custom
+    post types) return 200 to an anonymous caller; everything privileged returns
+    401 rest_forbidden, including the WordPress Abilities registry and the two
+    MCP tool surfaces installed on the site. This is a content-management
+    platform default rather than a RE/MAX API product, and it is catalogued as
+    such — but it is real, it is reachable, and it is where RE/MAX's only Model
+    Context Protocol endpoint lives.
+  humanURL: https://www.remax.eu/wp-json/
+  baseURL: https://www.remax.eu/wp-json/wp/v2
+  tags:
+  - Content
+  - WordPress
+  - MCP
+  - Europe
+  - Marketing
+  properties:
+  - type: APICatalog
+    url: well-known/re-max-eu-wp-json.json
+  - type: MCPServer
+    url: mcp/re-max-mcp.yml
 common:
+- type: DomainSecurity
+  url: security/re-max-domain-security.yml
+- type: DeveloperPortal
+  url: https://apidocs.datahub.remax.eu/
+- type: Postman
+  url: https://apidocs.datahub.remax.eu/
+- type: PrivacyPolicy
+  url: https://www.remax.eu/privacy-policy/
+- type: Authentication
+  url: authentication/re-max-authentication.yml
+- type: Conventions
+  url: conventions/re-max-conventions.yml
+- type: ErrorCatalog
+  url: errors/re-max-error-codes.yml
+- type: Lifecycle
+  url: lifecycle/re-max-lifecycle.yml
+- type: Conformance
+  url: conformance/re-max-conformance.yml
+- type: DataModel
+  url: data-model/re-max-data-model.yml
+- type: Packages
+  url: packages/re-max-packages.yml
+- type: Sandbox
+  url: sandbox/re-max-sandbox.yml
+- type: MCPServer
+  url: mcp/re-max-mcp.yml
+- type: WellKnown
+  url: well-known/re-max-well-known.yml
+- type: APICatalog
+  url: well-known/re-max-eu-wp-json.json
+- type: LLMsTxt
+  url: llms/re-max-llms.txt
+- type: LLMsTxt
+  url: llms/re-max-eu-site-llms.txt
+- type: AgentSkill
+  url: skills/_index.yml
 - type: Website
   url: https://www.remax.com/
 - type: Website

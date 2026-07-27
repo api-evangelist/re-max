@@ -1,0 +1,82 @@
+generated: '2026-07-26'
+method: searched
+source:
+- https://listingsapi-test.datahub.remax.eu/
+- collections/re-max-eu-listings-api.postman_collection.json
+summary: >-
+  RE/MAX Europe publishes documentation for the STAGING environment of its
+  Listings API and nothing for production - the inverse of the usual posture.
+  There is a real, separately hosted test environment with its own OAuth
+  authorization server, and the published example requests carry real-looking
+  test identifiers. Credentials for it are still partner-only; there is no
+  self-serve sandbox signup, no test key prefix scheme and no fixture or trigger
+  tooling. The Datahub API publishes no test environment at all.
+environments:
+- name: Listings API staging
+  api: RE/MAX Europe Listings API
+  documented: true
+  docs: https://listingsapi-test.datahub.remax.eu/
+  base_url: https://listing-api-remaxeu.bwscloud.tech/api/v1
+  auth_server: https://oauth.pre-prod.remaxeu-datahub.bwscloud.tech
+  host_note: >-
+    the staging API and its authorization server run on a third-party vendor
+    domain (bwscloud.tech), not on a remax.eu host
+  credentials: partner-only; the collection ships the placeholder <client-id>
+  live_probe:
+    url: https://listing-api-remaxeu.bwscloud.tech/api/v1/listings/countries
+    status: 403
+    finding: >-
+      the staging origin now returns an nginx 403 to every anonymous path,
+      including the previously unauthenticated-looking convenience reads
+- name: Listings API production
+  api: RE/MAX Europe Listings API
+  documented: false
+  note: >-
+    https://listingsapi.datahub.remax.eu/ does not resolve; no production base URL
+    is published anywhere
+- name: Datahub production
+  api: RE/MAX Europe Datahub API
+  documented: true
+  base_url: https://api.datahub.remax.eu/external
+  sandbox: none published
+test_values:
+  note: >-
+    Published verbatim in the RE/MAX Europe example requests. These are
+    documentation examples against the staging environment, not credentials.
+  region_codes:
+  - FI1
+  - GR1
+  - CH1
+  - CH2
+  - AT1
+  - GB1
+  - TR1
+  person_ids:
+  - FI1-P102962
+  - CH2-P100002
+  - ch1-p12345
+  office_ids:
+  - AT1-F100199
+  - FI1-F1079993
+  team_ids:
+  - FI1-T100001
+  - GR1-T102170
+  listing_ids:
+  - test-12345
+  - testspecial3
+  - test1234
+  - 765-1032
+  - 756-1032
+  - 1234-listing
+  listing_log_id: '2'
+  image_ids:
+  - '388'
+  - '400'
+test_clocks: none
+fixtures_or_triggers: none
+key_prefixes: none
+self_serve: false
+security_note: >-
+  The published staging collection embedded a live-looking 128-character
+  hexadecimal staging access_token in four request URLs. All four were redacted
+  before the collection was saved to this repo; RE/MAX Europe should rotate it.

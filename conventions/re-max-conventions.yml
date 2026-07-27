@@ -1,0 +1,138 @@
+generated: '2026-07-26'
+method: derived
+source:
+- collections/re-max-eu-datahub-api.postman_collection.json
+- collections/re-max-eu-listings-api.postman_collection.json
+- live anonymous probes, 2026-07-26
+note: >-
+  RE/MAX publishes no written API style guide, so these conventions are read off
+  the two published RE/MAX Europe Postman collections and confirmed against live
+  responses where anonymous calls were possible. They describe two separately
+  built APIs that do not share conventions with each other.
+authentication:
+  style: OAuth 2.0 authorization code
+  transport: access_token query parameter (not an Authorization header)
+  detail: authentication/re-max-authentication.yml
+idempotency:
+  supported: false
+  header: null
+  evidence: >-
+    No Idempotency-Key header, no client-supplied request id and no retry
+    semantics appear in either collection. Write operations (POST
+    /external/persons/, POST /external/person/:personID/title/, POST
+    /api/v1/listings, POST /external/teams) are unguarded, and the Listings API
+    queues writes for deferred validation, so a retried create is a probable
+    duplicate. This is a real gap, not an omission in the docs.
+pagination:
+  datahub:
+    style: page-number
+    params:
+    - page
+    - size
+    - sort
+    example: /external/offices/?page=1&size=100&sort=uniqueOfficeID
+    default_size: unpublished
+    max_size: unpublished
+    response_envelope: unpublished
+  listings:
+    style: page-number
+    params:
+    - page
+    - limit
+    example: /api/v1/regions?page=1&limit=25
+    default_size: 25 (as documented in the example requests)
+  note: >-
+    The two APIs disagree on the page-size parameter name (size vs limit) and on
+    whether sort is supported, which is the clearest evidence they were built by
+    different teams against different platforms.
+filtering:
+  datahub:
+  - is_active=1 on /external/teams/
+  - unique_office_id= on /external/teams/
+  - onlyActive on /external/person/:personID/history/
+  listings:
+  - id on /api/v1/listings
+  - country on /api/v1/listings/citiesbycountry
+  - listingId + regionId on the "Calls with Datahub IDs" family
+  note: >-
+    The Listings API exposes the same resource twice - once keyed by its own
+    surrogate integer id (/api/v1/listings/1) and once keyed by the RE/MAX
+    Datahub composite identity (/api/v1/listings/getByRegionIdAndListingId?
+    regionId=..&listingId=..). Partners integrating from Datahub should use the
+    second family.
+identifiers:
+  scheme: region-prefixed composite keys
+  patterns:
+  - regionId - two/three character region code, e.g. FI1, GR1, CH1, CH2, AT1, GB1, TR1
+  - person - <regionId>-P<number>, e.g. FI1-P102962, CH2-P100002
+  - office - <regionId>-F<number>, e.g. AT1-F100199, FI1-F1079993
+  - team - <regionId>-T<number>, e.g. FI1-T100001, GR1-T102170
+  - listing - partner-supplied listingId, unique only within a regionId
+  note: identity is region-scoped; a listingId is not globally unique
+versioning:
+  datahub:
+    scheme: none
+    detail: unversioned /external path; no version header, no date pinning
+  listings:
+    scheme: uri-path
+    current: v1
+    detail: /api/v1/...
+  breaking_change_policy: none published
+error_handling:
+  envelope: '{"status":[{"code":<int>,"message":"<string>"}],"result":{}}'
+  rfc9457: false
+  catalog: errors/re-max-error-codes.yml
+  deferred_validation: >-
+    Listings writes are accepted into a queue and validated afterwards; failures
+    surface through GET /api/v1/listinglogs and GET /api/v1/listinglogs/failed
+    rather than in the response to the write, so a 2xx on POST /api/v1/listings
+    does not mean the listing was accepted.
+rate_limiting:
+  documented: false
+  headers: none observed
+  detail: no rate-limit, quota or Retry-After signalling is published
+request_tracing:
+  request_id_header: none documented
+  correlation: >-
+    The Listings API log endpoints (/listinglogs, /listinglogs/:id,
+    /listinglogs/listingId/:id, /listinglogs/regionId/:id) are the only tracing
+    surface, and they are per-listing rather than per-request.
+metadata_and_expansion:
+  sparse_fields: not supported
+  expansion: not supported
+  custom_metadata: not supported
+webhooks_or_events:
+  supported: false
+  detail: no webhook registration, callback or event stream in either collection
+media:
+  listing_images:
+    add: POST /api/v1/listings/<listing_id>/images
+    add_by_composite_key: POST /api/v1/listings/addImagesByListingIdAndRegionId
+    replace: PUT /api/v1/listings/replaceImageByListingIdAndRegionId/<image_id>
+    describe: PUT /api/v1/listings/<listing_id>/images/<image_id>/description
+    delete: DELETE /api/v1/listings/<listing_id>/images/<image_id>
+    model: images are supplied as webLink URLs plus a description, not binary uploads
+data_standards:
+  reso_data_dictionary: false
+  odata: false
+  universal_property_identifier: false
+  evidence: >-
+    The listing payload uses proprietary field names (listingId, offerType,
+    listingType, noOfBedrooms, buildingSize, energyRating, commissionRateBuyer)
+    where the RESO Data Dictionary would use ListingKey, StandardStatus,
+    PropertyType, BedroomsTotal, LivingArea. Nothing in either collection maps
+    to a RESO resource.
+privacy_observations:
+- >-
+  GET /external/personBySSN/:SSNnumber looks up a person by social security
+  number. A partner-issued OAuth token with no published scope vocabulary can
+  reach national identity numbers for the whole franchise network.
+- >-
+  The Datahub reporting family returns per-office and per-person GCI, transaction
+  and volume figures - commercially sensitive data on the same coarse credential.
+cross_links:
+  authentication: authentication/re-max-authentication.yml
+  errors: errors/re-max-error-codes.yml
+  lifecycle: lifecycle/re-max-lifecycle.yml
+  data_model: data-model/re-max-data-model.yml
+  sandbox: sandbox/re-max-sandbox.yml

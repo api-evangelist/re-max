@@ -1,0 +1,112 @@
+generated: '2026-07-26'
+method: searched
+source:
+- collections/re-max-eu-datahub-api.postman_collection.json
+- collections/re-max-eu-listings-api.postman_collection.json
+- https://apidocs.datahub.remax.eu/
+- live anonymous probes of the OAuth and API hosts, 2026-07-26
+docs: https://apidocs.datahub.remax.eu/
+summary:
+  types:
+  - oauth2
+  oauth2_flows:
+  - authorizationCode
+  api_key_in: []
+  bearer_tokens: false
+  token_transport: query-parameter
+  openid_connect_discovery: false
+  scopes_published: false
+  self_serve_credentials: false
+note: >-
+  RE/MAX has no single authentication model because it has no single API
+  program. The two documented RE/MAX Europe APIs both use OAuth 2.0
+  authorization code against RE/MAX Europe operated authorization servers, and
+  both carry the resulting token as an access_token QUERY PARAMETER rather than
+  an Authorization header. No OpenID Connect discovery document and no RFC 8414
+  authorization-server metadata is served by either authorization server. No
+  scope vocabulary is published; the Postman documentation ships the literal
+  placeholder "<scope>". Credentials are not self-serve: the Datahub collection
+  carries the client_id placeholder "Ask_REU" (ask RE/MAX Europe). Separately,
+  the remax.eu WordPress estate answers anonymously for public read routes and
+  returns 401 rest_forbidden for everything privileged, including its MCP and
+  Abilities routes.
+schemes:
+- name: datahub-oauth2
+  api: RE/MAX Europe Datahub API
+  type: oauth2
+  flow: authorizationCode
+  authorizationUrl: https://oauth.datahub.remax.eu/authorize
+  tokenUrl: https://oauth.datahub.remax.eu/token
+  client_id_placeholder: Ask_REU
+  scopes: []
+  token_transport: access_token query parameter on every request
+  sources:
+  - collections/re-max-eu-datahub-api.postman_collection.json
+  probes:
+  - url: https://oauth.datahub.remax.eu/authorize
+    status: 200
+  - url: https://oauth.datahub.remax.eu/token
+    status: 404
+    note: 404 to an anonymous GET; the collection documents it as a POST token endpoint
+  - url: https://oauth.datahub.remax.eu/.well-known/openid-configuration
+    status: 404
+  - url: https://oauth.datahub.remax.eu/.well-known/oauth-authorization-server
+    status: 404
+- name: listings-oauth2-staging
+  api: RE/MAX Europe Listings API (staging)
+  type: oauth2
+  flow: authorizationCode
+  authorizationUrl: https://oauth.pre-prod.remaxeu-datahub.bwscloud.tech/authorize
+  tokenUrl: https://oauth.pre-prod.remaxeu-datahub.bwscloud.tech/token
+  client_id_placeholder: <client-id>
+  scopes: []
+  token_transport: access_token query parameter on every request
+  sources:
+  - collections/re-max-eu-listings-api.postman_collection.json
+  probes:
+  - url: https://oauth.pre-prod.remaxeu-datahub.bwscloud.tech/.well-known/openid-configuration
+    status: 403
+    note: origin returns nginx 403 to all anonymous paths
+- name: wordpress-rest
+  api: RE/MAX Europe Site API (WordPress REST)
+  type: cookie-or-application-password
+  flow: null
+  anonymous_read: true
+  sources:
+  - well-known/re-max-eu-wp-json.json
+  probes:
+  - url: https://www.remax.eu/wp-json/wp/v2/posts?per_page=1
+    status: 200
+    note: anonymous read of published content succeeds
+  - url: https://www.remax.eu/wp-json/wp-abilities/v1/abilities
+    status: 401
+    body: '{"code":"rest_forbidden","message":"Sorry, you are not allowed to do that."}'
+  - url: https://www.remax.eu/wp-json/mcp/mcp-adapter-default-server
+    status: 401
+    method_probed: 'POST tools/list'
+enforcement_evidence:
+- url: https://api.datahub.remax.eu/external/regions/
+  status: 400
+  body: '{"status":[{"code":4007,"message":"Login parameter Required"}],"result":{}}'
+  finding: calling without an access_token is rejected
+- url: https://api.datahub.remax.eu/external/regions/?access_token=invalidtoken123
+  status: 403
+  body: '{"status":[{"code":4004,"message":"Invalid or expired Session/Token"}],"result":{}}'
+  finding: an invalid token is rejected; the gate is real and enforced
+security_observations:
+- >-
+  Bearer material in the query string. Both RE/MAX Europe APIs pass the OAuth
+  access token as a URL query parameter, so tokens land in server logs, proxy
+  logs, referrer headers and browser history. An Authorization header is the
+  RFC 6750 recommended transport.
+- >-
+  No authorization-server metadata. Neither OIDC discovery nor RFC 8414 metadata
+  is served, so a client cannot machine-discover endpoints, supported grants,
+  PKCE support or signing keys.
+- >-
+  No published scopes. Without a scope vocabulary, every issued credential is
+  effectively coarse-grained from a consumer's point of view.
+- >-
+  The published staging Listings collection embedded a live-looking 128-character
+  hexadecimal access_token in four request URLs; those values were redacted
+  before this repo saved the file (see review.yml harvest.collections).

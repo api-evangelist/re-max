@@ -1,0 +1,266 @@
+generated: '2026-07-26'
+method: derived
+source:
+- collections/re-max-eu-datahub-api.postman_collection.json
+- collections/re-max-eu-listings-api.postman_collection.json
+note: >-
+  Derived from the request paths, path parameters, query parameters and request
+  bodies of the two published RE/MAX Europe Postman collections. There is no
+  OpenAPI to read $refs from, so relationships are inferred from identifier
+  fields and path nesting that appear verbatim in the collections. Field lists
+  are only recorded where a real request body publishes them.
+identity_scheme:
+  description: region-prefixed composite keys; identity is scoped to a RE/MAX region
+  patterns:
+    region: two or three character code (FI1, GR1, CH1, CH2, AT1, GB1, TR1)
+    person: <region>-P<number> (FI1-P102962, CH2-P100002)
+    office: <region>-F<number> (AT1-F100199, FI1-F1079993)
+    team: <region>-T<number> (FI1-T100001, GR1-T102170)
+    listing: partner-supplied listingId, unique only within a region
+entities:
+- name: Region
+  api: datahub
+  operations:
+  - GET /external/regions/
+  - GET /external/region/:regionID/subregions/
+  - GET /external/region/:regionID/titles/
+  note: top of the RE/MAX Europe franchise hierarchy; a master franchise territory
+- name: Subregion
+  api: datahub
+  operations:
+  - GET /external/region/:regionID/subregions/
+- name: Office
+  api: datahub
+  operations:
+  - GET /external/offices/
+  - GET /external/office/:officeID
+  - PUT /external/office/:officeID
+  - GET /external/office/:officeID/franchiseAgreement/
+  note: a franchised RE/MAX brokerage office
+- name: FranchiseAgreement
+  api: datahub
+  operations:
+  - GET /external/office/:officeID/franchiseAgreement/
+  note: the franchise contract data behind an office
+- name: Person
+  api: datahub
+  operations:
+  - GET /external/persons/
+  - POST /external/persons/
+  - GET /external/person/:personID
+  - PUT /external/person/:personID
+  - GET /external/personBySSN/:SSNnumber
+  - POST /external/person/:personID/terminate/
+  note: >-
+    a natural person in the network; reachable by national social security number,
+    which is the highest-sensitivity surface in the estate
+- name: Title
+  api: datahub
+  operations:
+  - GET /external/person/:personID/history/
+  - POST /external/person/:personID/title/
+  - PUT /external/person/:personID/changeCurrentPrimaryTitle/
+  - GET /external/title/:titleID/
+  - PUT /external/title/:titleID/transfer/
+  - PUT /external/title/:titleID/exchange/
+  - PUT /external/title/:titleID/end/
+  note: >-
+    a RE/MAX Title is the role record binding a Person to an Office for a period;
+    it is the core temporal entity of the Datahub model
+- name: Team
+  api: datahub
+  operations:
+  - GET /external/teams/
+  - POST /external/teams
+  - GET /external/teams/:teamID
+  - PUT /external/teams/:teamID
+  - POST /external/teams/:teamID/change-leader
+  - POST /external/teams/:teamID/dissolve
+- name: TeamMembership
+  api: datahub
+  operations:
+  - GET /external/teams/:teamID/members
+  - POST /external/teams/:teamID/members
+  - PUT /external/teams/:teamID/members/:memberID
+  - GET /external/person/:personID/memberships
+- name: ReportingPeriod
+  api: datahub
+  operations:
+  - GET /external/reporting/:regionID/:reportingPeriod/
+  - GET /external/reporting/:regionID/:reportingPeriod/:officeID/
+  - POST /external/reporting/:regionID/:reportingPeriod/
+  note: monthly GCI, transaction count and volume per office and per person
+- name: Listing
+  api: listings
+  operations:
+  - GET /api/v1/listings
+  - GET /api/v1/listings/random
+  - POST /api/v1/listings
+  - PUT /api/v1/listings/:id
+  - DELETE /api/v1/listings/:id
+  - GET /api/v1/listings/getByRegionIdAndListingId
+  - PUT /api/v1/listings/updateByRegionIdAndListingId
+  - DELETE /api/v1/listings/deleteByRegionIdAndListingId
+  fields:
+  - listingId
+  - status
+  - agentUniqueId
+  - title
+  - description
+  - roomDescription
+  - bathroomDescription
+  - bedroomDescription
+  - kitchenDescription
+  - address
+  - streetBlock
+  - zipcode
+  - regionId
+  - officeId
+  - city
+  - country
+  - offerType
+  - listingType
+  - buildingSize
+  - propertySize
+  - sizeUnit
+  - virtualTour
+  - noOfRooms
+  - noOfBathrooms
+  - noOfBedrooms
+  - constructionYear
+  - energyRating
+  - floorNumber
+  - elevatorAccess
+  - outsideAreaType
+  - outsideAreaSize
+  - listingCurrency
+  - listingPrice
+  - sellPrice
+  - dateSold
+  - datePublished
+  - commissionRateBuyer
+  - commissionRateSeller
+  - contractType
+  - buyerDemographic
+  - sellerDemographic
+  - listingUrl
+  - listingImages
+  field_source: request body of "Add Listing" in the staging Listings collection
+  note: >-
+    proprietary schema; none of these field names is a RESO Data Dictionary term
+- name: ListingImage
+  api: listings
+  operations:
+  - POST /api/v1/listings/:listing_id/images
+  - POST /api/v1/listings/addImagesByListingIdAndRegionId
+  - PUT /api/v1/listings/replaceImageByListingIdAndRegionId/:image_id
+  - PUT /api/v1/listings/:listing_id/images/:image_id/description
+  - PUT /api/v1/listings/updateImageDescriptionByListingIdAndRegionId/:image_id
+  - DELETE /api/v1/listings/:listing_id/images/:image_id
+  - DELETE /api/v1/listings/deleteImageByListingIdAndRegionId/:image_id
+  fields:
+  - webLink
+  - description
+  note: images are referenced by URL (webLink), not uploaded as binary
+- name: ListingEntryLog
+  api: listings
+  operations:
+  - GET /api/v1/listinglogs
+  - GET /api/v1/listinglogs/:id
+  - GET /api/v1/listinglogs/failed
+  - GET /api/v1/listinglogs/listingId/:listingId
+  - GET /api/v1/listinglogs/regionId/:regionId
+  note: >-
+    the deferred-validation audit trail; the only place a partner learns that a
+    queued write failed
+- name: Agent
+  api: listings
+  operations:
+  - GET /api/v1/agents
+  - GET /api/v1/agents/:id
+  - GET /api/v1/agents/getByRemaxId/:remaxId
+  note: the Listings API projection of a Datahub Person
+- name: ListingCountry
+  api: listings
+  operations:
+  - GET /api/v1/listings/countries
+  - GET /api/v1/listings/citiesbycountry?country=
+relationships:
+- from: Region
+  to: Subregion
+  type: has_many
+  via: regionID
+- from: Region
+  to: Office
+  type: has_many
+  via: regionId prefix on the office identifier
+- from: Region
+  to: Title
+  type: has_many
+  via: GET /external/region/:regionID/titles/
+- from: Office
+  to: FranchiseAgreement
+  type: has_one
+  via: officeID
+- from: Person
+  to: Title
+  type: has_many
+  via: personID
+- from: Title
+  to: Office
+  type: belongs_to
+  via: title exchange/transfer operate between offices
+- from: Team
+  to: TeamMembership
+  type: has_many
+  via: teamID
+- from: Person
+  to: TeamMembership
+  type: has_many
+  via: GET /external/person/:personID/memberships
+- from: Office
+  to: ReportingPeriod
+  type: has_many
+  via: /external/reporting/:regionID/:reportingPeriod/:officeID/
+- from: Listing
+  to: ListingImage
+  type: has_many
+  via: listingId
+- from: Listing
+  to: Agent
+  type: belongs_to
+  via: agentUniqueId
+- from: Listing
+  to: Office
+  type: belongs_to
+  via: officeId
+- from: Listing
+  to: Region
+  type: belongs_to
+  via: regionId
+- from: Listing
+  to: ListingEntryLog
+  type: has_many
+  via: listingId
+cross_api_bridge:
+  description: >-
+    The Listings API is a downstream projection of Datahub identity. Its
+    getByRemaxId operations for offices and agents take Datahub composite keys
+    (AT1-F100199, ch1-p12345), which is the seam between the two APIs.
+  operations:
+  - GET /api/v1/offices/getByRemaxId/:remaxId
+  - GET /api/v1/agents/getByRemaxId/:remaxId
+  - GET /api/v1/regions/getByRemaxId/:remaxId
+absent_domains:
+  note: >-
+    RE/MAX publishes no API in these adjacent real-estate domains anywhere in the
+    estate
+  domains:
+  - property records
+  - valuation / AVM
+  - title and escrow
+  - transaction management
+  - documents and e-signature
+  - tenancy and rentals
+  - payments
+  - consumer portal search (remax.com is WAF-protected and robots-disallowed on /api/)

@@ -1,0 +1,87 @@
+generated: '2026-07-26'
+method: searched
+status: published
+access: authenticated
+source:
+- https://www.remax.eu/wp-json/
+- https://www.remax.eu/wp-json/mcp
+- live JSON-RPC probe of tools/list, 2026-07-26
+note: >-
+  RE/MAX operates no API-program MCP server. What it does operate - verified live
+  on 2026-07-26 - is a Model Context Protocol endpoint exposed by the WordPress
+  MCP Adapter running on the RE/MAX Europe marketing site (remax.eu). The
+  namespace descriptor is anonymously readable and the JSON-RPC route exists and
+  enforces authentication, so the server is real but its tool surface cannot be
+  enumerated without WordPress credentials. Recorded honestly as a CMS plugin
+  surface, not as a RE/MAX developer product. No tools are listed below because
+  none could be read without fabricating them.
+server:
+  name: remax-eu-wordpress-mcp
+  implementation: WordPress MCP Adapter (mcp-adapter-default-server)
+  transport: http
+  protocol: JSON-RPC 2.0 over HTTP
+  url: https://www.remax.eu/wp-json/mcp/mcp-adapter-default-server
+  methods_allowed:
+  - GET
+  - POST
+  - DELETE
+  namespace_descriptor: https://www.remax.eu/wp-json/mcp
+  authentication: WordPress session cookie or application password (see authentication/re-max-authentication.yml)
+probes:
+- url: https://www.remax.eu/wp-json/mcp
+  method: GET
+  status: 200
+  finding: >-
+    Returns the MCP namespace route descriptor listing /mcp and
+    /mcp/mcp-adapter-default-server with methods POST, GET, DELETE.
+- url: https://www.remax.eu/wp-json/mcp/mcp-adapter-default-server
+  method: POST
+  body: '{"jsonrpc":"2.0","id":1,"method":"tools/list"}'
+  status: 401
+  response: '{"code":"rest_forbidden","message":"Sorry, you are not allowed to do that.","data":{"status":401}}'
+  finding: the live tool schema is auth-gated; anonymous introspection is refused
+- url: https://www.remax.eu/wp-json/wp-abilities/v1/abilities
+  method: GET
+  status: 401
+  finding: >-
+    the WordPress Abilities API (the registry the MCP adapter exposes as tools) is
+    also gated
+- url: https://www.remax.eu/wp-json/jet-engine/v1/mcp-tools
+  method: GET
+  status: 401
+  response: '{"code":"rest_forbidden","message":"You cannot view the feature list.","data":{"status":401}}'
+  finding: >-
+    a second MCP tool surface, from the JetEngine plugin, is present and gated;
+    it also exposes /jet-engine/v1/mcp (GET, POST) and
+    /jet-engine/v1/mcp-tools/run/:name (POST)
+related_surfaces:
+- namespace: mcp
+  routes:
+  - GET /wp-json/mcp
+  - GET|POST|DELETE /wp-json/mcp/mcp-adapter-default-server
+- namespace: jet-engine/v1
+  routes:
+  - GET /wp-json/jet-engine/v1/mcp-tools
+  - POST /wp-json/jet-engine/v1/mcp-tools/run/:name
+  - GET|POST /wp-json/jet-engine/v1/mcp
+- namespace: wp-abilities/v1
+  routes:
+  - GET /wp-json/wp-abilities/v1/abilities
+  - GET /wp-json/wp-abilities/v1/abilities/:name
+  - GET|POST|PUT|PATCH|DELETE /wp-json/wp-abilities/v1/abilities/:name/run
+tools: []
+tools_note: >-
+  Not recorded. tools/list returns 401 and the provider publishes no tool
+  manifest, so any tool list here would be invention. Re-run this probe with
+  credentials to capture the real inputSchema set.
+crosswalk: null
+crosswalk_note: >-
+  No tool crosswalk is emitted. A crosswalk binds MCP tools to backing OpenAPI
+  operationIds; RE/MAX publishes no OpenAPI, and the MCP tool list is gated, so
+  both sides of the mapping are unavailable. Emitting one would be fabrication.
+governance_observation: >-
+  A marketing CMS that has quietly grown an MCP endpoint is the most common
+  shape of unmanaged agent exposure in 2026: nobody in the API organisation
+  chose it, it inherits WordPress authentication rather than the OAuth model the
+  real APIs use, and its tool surface is defined by whichever plugins are
+  installed.

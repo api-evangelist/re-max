@@ -1,0 +1,53 @@
+generated: '2026-07-26'
+method: searched
+source:
+- npm registry search, 2026-07-26
+- https://pypi.org/pypi/remax/json (404)
+- https://apidocs.datahub.remax.eu/
+- https://listingsapi-test.datahub.remax.eu/
+summary: >-
+  RE/MAX publishes no first-party client libraries in any registry. Neither
+  RE/MAX Europe Postman documentation site links an SDK, and there is no RE/MAX
+  GitHub organisation (api.github.com/orgs/remax returns 404). Recorded as a
+  verified negative so later rounds do not re-search it.
+packages: []
+official_sdk_count: 0
+registries_checked:
+- registry: npm
+  result: no first-party package
+- registry: pypi
+  result: no first-party package (pypi.org/project/remax 404)
+- registry: github
+  result: no RE/MAX organisation (api.github.com/orgs/remax 404)
+- registry: maven-central
+  result: no first-party package
+- registry: nuget
+  result: no first-party package
+- registry: rubygems
+  result: no first-party package
+- registry: packagist
+  result: no first-party package
+- registry: crates.io
+  result: no first-party package
+homonym_trap:
+  note: >-
+    Registry searches for "remax" are dominated by unrelated projects. None of
+    these belong to RE/MAX Holdings or RE/MAX Europe and none should ever be
+    catalogued as a RE/MAX SDK.
+  packages:
+  - name: '@remax/*'
+    registry: npm
+    actual_owner: Remax - an unrelated open-source React mini-program framework
+  - name: remaxjs
+    registry: npm
+    actual_owner: same unrelated React mini-program framework
+  - name: datahub-nodejs-sdk
+    registry: npm
+    actual_owner: unrelated "DataHub" project; matches only on the word Datahub
+  - name: macaca-datahub
+    registry: npm
+    actual_owner: unrelated Macaca testing tool
+integration_path: >-
+  Partners integrate against the two RE/MAX Europe APIs directly over HTTP using
+  the published Postman collections in collections/. There is no generated client,
+  no OpenAPI to generate one from, and no CLI.

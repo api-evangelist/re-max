@@ -1,0 +1,29 @@
+generated: '2026-07-26'
+method: generated
+note: >-
+  RE/MAX publishes no OpenAPI, so these skills are grounded in the two harvested
+  RE/MAX Europe Postman collections in collections/. Every request path in each
+  skill appears verbatim in the collection it names; operations are identified by
+  METHOD + path because no operationIds exist. Both APIs are partner-credentialed,
+  so a skill cannot be executed without RE/MAX Europe issuing credentials.
+skills:
+- file: re-max-datahub-agent-lifecycle.md
+  name: RE/MAX Europe agent lifecycle (person, title, team)
+  api: collections/re-max-eu-datahub-api.postman_collection.json
+  base_url: https://api.datahub.remax.eu/external
+  operations:
+  - POST /external/persons/
+  - POST /external/person/{personID}/title/
+  - PUT /external/title/{titleID}/transfer/
+  - POST /external/teams
+  - POST /external/person/{personID}/terminate/
+- file: re-max-publish-listing.md
+  name: Publish a RE/MAX Europe listing with images
+  api: collections/re-max-eu-listings-api.postman_collection.json
+  base_url: https://listing-api-remaxeu.bwscloud.tech/api/v1
+  operations:
+  - POST /api/v1/listings
+  - POST /api/v1/listings/addImagesByListingIdAndRegionId
+  - GET /api/v1/listinglogs/failed
+  - PUT /api/v1/listings/updateByRegionIdAndListingId
+  - DELETE /api/v1/listings/deleteByRegionIdAndListingId
