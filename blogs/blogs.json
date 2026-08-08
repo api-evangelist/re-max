@@ -2,6 +2,13 @@
   "repo": "re-max",
   "feeds": [
     {
+      "source": "https://remax.eu/feed/",
+      "feed_url": "https://remax.eu/feed/",
+      "title": "",
+      "saved": 0,
+      "method": "feed"
+    },
+    {
       "source": "https://www.remax.eu/",
       "feed_url": "https://remax.eu/feed/",
       "title": "",
@@ -9,6 +16,6 @@
       "method": "discovered"
     }
   ],
-  "post_count": 0,
-  "fetched": "2026-08-01T15:49:00Z"
+  "post_count": 1,
+  "fetched": "2026-08-06T14:08:46Z"
 }
