@@ -60,7 +60,7 @@ tags:
 - Rentals
 created: '2026-07-26'
 modified: '2026-07-26'
-specificationVersion: '0.19'
+specificationVersion: '0.23'
 apis:
 - aid: re-max:re-max-eu-datahub-api
   name: RE/MAX Europe Datahub API
