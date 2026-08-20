@@ -47,6 +47,18 @@ accessModel:
   method: manual
 image: https://remax.eu/wp-content/uploads/2026/03/REMAX-Balloon-RGB.svg
 tags:
+- Real-Estate
+- United States
+- Brokerage
+- Property Listings
+- MLS
+- RESO
+- IDX
+- PropTech
+- Franchising
+- Mortgage
+- Rentals
+tags_raw:
 - Real Estate
 - United States
 - Brokerage
@@ -82,6 +94,13 @@ apis:
   - Franchising
   - Offices
   - Agents
+  - Team
+  - Reporting
+  - Europe
+  tags_raw:
+  - Franchising
+  - Offices
+  - Agents
   - Teams
   - Reporting
   - Europe
@@ -110,6 +129,13 @@ apis:
   humanURL: https://listingsapi-test.datahub.remax.eu/
   baseURL: https://listing-api-remaxeu.bwscloud.tech/api/v1
   tags:
+  - Property Listings
+  - Image
+  - Regions
+  - Agents
+  - Europe
+  - Staging
+  tags_raw:
   - Property Listings
   - Images
   - Regions
