@@ -83,7 +83,7 @@ tags_raw:
 - Rentals
 - Real-Estate
 created: '2026-07-26'
-modified: '2026-07-26'
+modified: '2026-10-06'
 specificationVersion: '0.23'
 apis:
 - aid: re-max:re-max-eu-datahub-api
@@ -193,6 +193,8 @@ apis:
   x-platform: wordpress
   x-platform-surface: rest
 common:
+- url: https://news.remax.com/feed
+  type: BlogRSS
 - type: DomainSecurity
   url: security/re-max-domain-security.yml
 - type: DeveloperPortal
