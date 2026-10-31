@@ -1,4 +1,4 @@
-# RE/MAX (re-max)
+# RE/MAX
 
 <!-- API-EVANGELIST-PROVENANCE:BEGIN -->
 > ### About this repository
@@ -64,92 +64,97 @@
 > Full detail: **[Where this data comes from](https://apievangelist.com/about/where-our-data-comes-from)**
 <!-- API-EVANGELIST-PROVENANCE:END -->
 
-RE/MAX Holdings, Inc. (NYSE: RMAX, SIC 6531, Denver, Colorado) is one of the world's largest real estate brokerage franchisors, licensing the RE/MAX brand to independently owned and operated brokerages across more than 110 countries and territories, and franchising mortgage brokerages in the United States under the Motto Mortgage brand with loan processing through wemlo. Its home market is the United States, where it sits in the value chain as a franchisor and consumer portal operator rather than as a data owner: the listing content behind remax.com is licensed from roughly 500 local Multiple Listing Services under IDX and syndication agreements, so RE/MAX is a consumer of MLS data, not a publisher of it. Its API posture reflects that position honestly. RE/MAX is a RESO Class D member (Brokers, Agents and Appraisers) and holds a seat on the RESO Board of Directors, but it does not appear in the RESO certification directory of certified data providers and publishes no RESO Web API, no OData `$metadata` document and no Universal Property Identifier surface. In the United States there is no developer portal, no published API program and no machine-readable contract of any kind; `developer.remax.com`, `developers.remax.com` and `docs.remax.com` are only wildcard DNS entries pointing at the kvCORE agent website platform, and `api.remax.com` is a dangling CNAME to a decommissioned booj host that no longer resolves. The only real, publicly documented RE/MAX API surface belongs to RE/MAX Europe, whose Datahub franchise-operations API and Listings API are published as public Postman documentation with OAuth 2.0 authentication, but whose credentials are issued only to RE/MAX regional master franchisees, offices and their vendors — documented, but not self-serve.
+RE/MAX Holdings, Inc. (NYSE: RMAX, SIC 6531, Denver, Colorado) is one of the world's largest real estate brokerage franchisors, licensing the RE/MAX brand to independently owned and operated brokerages across more than 110 countries and territories, and franchising mortgage brokerages in the United States under the Motto Mortgage brand with loan processing through wemlo. Its home market is the United States, where it sits in the value chain as a franchisor and consumer portal operator rather than as a data owner: the listing content behind remax.com is licensed from roughly 500 local Multiple Listing Services under IDX and syndication agreements, so RE/MAX is a consumer of MLS data, not a publisher of it. Its API posture reflects that position honestly. RE/MAX is a RESO Class D member (Brokers, Agents and Appraisers) and holds a seat on the RESO Board of Directors, but it does not appear in the RESO certification directory of certified data providers and publishes no RESO Web API, no OData $metadata document and no Universal Property Identifier surface. In the United States there is no developer portal, no published API program and no machine-readable contract of any kind; developer.remax.com, developers.remax.com and docs.remax.com are only wildcard DNS entries pointing at the kvCORE agent website platform, and api.remax.com is a dangling CNAME to a decommissioned booj host that no longer resolves. The only real, publicly documented RE/MAX API surface belongs to RE/MAX Europe, whose Datahub franchise-operations API and Listings API are published as public Postman documentation with OAuth 2.0 authentication, but whose credentials are issued only to RE/MAX regional master franchisees, offices and their vendors — documented, but not self-serve. The only anonymously callable, self-describing RE/MAX endpoint family found anywhere in the estate is the WordPress REST API on the RE/MAX Europe marketing site (remax.eu/wp-json, 42 namespaces and 791 routes), which also exposes an auth-gated Model Context Protocol endpoint via the WordPress MCP Adapter — a CMS surface rather than an API product, but the closest thing to agent-accessible RE/MAX infrastructure that exists today.
 
-**APIs.json:** [https://raw.githubusercontent.com/api-evangelist/re-max/refs/heads/main/apis.yml](https://raw.githubusercontent.com/api-evangelist/re-max/refs/heads/main/apis.yml)
+**Areas:** Real Estate · United States · Brokerage · Property Listings · MLS · RESO · IDX · PropTech · Franchising · Mortgage · Rentals
 
-## Tags
+## RE/MAX on APIs.io
 
-- Real Estate
-- United States
-- Brokerage
-- Property Listings
-- MLS
-- RESO
-- IDX
-- PropTech
-- Franchising
-- Mortgage
-- Rentals
+Everything profiled for RE/MAX is published on APIs.io rather than in this repository. Start at the provider page — **[apis.io/providers/re-max/](https://apis.io/providers/re-max/)** — or go straight to one of the APIs or properties below.
 
-## Timestamps
+### APIs (3)
 
-- **Created:** 2026-07-26
-- **Modified:** 2026-07-26
+- [RE/MAX Europe Datahub API](https://apis.io/apis/re-max/re-max-eu-datahub-api/) — The RE/MAX Europe Datahub API is the franchise-operations API behind the RE/MAX EU Datahub application. It exposes offices, persons, RE/MAX Titles (the…
+- [RE/MAX Europe Listings API](https://apis.io/apis/re-max/re-max-eu-listings-api/) — The RE/MAX Europe Listings API is used in conjunction with the RE/MAX EU Datahub application to add, update, retrieve and delete property listing data and…
+- [RE/MAX Europe Site API (WordPress REST)](https://apis.io/apis/re-max/re-max-eu-site-api/) — The RE/MAX Europe marketing site at remax.eu runs WordPress and exposes the WordPress REST API anonymously at /wp-json/. The route descriptor published…
 
-## APIs
+### Published properties
 
-### RE/MAX Europe Datahub API
+Each property below is a page on APIs.io carrying the machine-readable artifact and what it says.
 
-The RE/MAX Europe Datahub API is the franchise-operations API behind the RE/MAX EU Datahub application. It exposes offices, persons, RE/MAX Titles (the agent/broker role records), teams, regions and monthly GCI / transaction / volume reporting to RE/MAX regional master franchisees and their vendors. It is a proprietary REST contract — it carries no RESO Data Dictionary fields, no OData surface and no Universal Property Identifier. Authentication is OAuth 2.0 against `https://oauth.datahub.remax.eu`, with the resulting token passed as an `access_token` query parameter; the published Postman documentation carries the client_id placeholder `Ask_REU`, confirming credentials are handed out by RE/MAX Europe rather than self-served. Documentation is public; access is not.
+#### MCP servers (1)
 
-- **Human URL:** [https://apidocs.datahub.remax.eu/](https://apidocs.datahub.remax.eu/)
-- **Base URL:** `https://api.datahub.remax.eu/external`
+Model Context Protocol servers that expose the API to agents.
 
-#### Tags
+- [remax-eu-wordpress-mcp](https://apis.io/servers/re-max/remax-eu-wordpress-mcp/)
 
-- Franchising
-- Offices
-- Agents
-- Teams
-- Reporting
-- Europe
+#### Security (2)
 
-#### Properties
+Authentication, trust centre, and vulnerability disclosure.
 
-- [Documentation](https://apidocs.datahub.remax.eu/)
-- [Postman Collection](collections/re-max-eu-datahub-api.postman_collection.json) — [Postman Collection 2.0](https://schema.getpostman.com/json/collection/v2.0.0/collection.json)
-- [Authentication](https://oauth.datahub.remax.eu/authorize)
+- [Re Max Authentication](https://apis.io/security/re-max/re-max-authentication/)
+- [Re Max Domain Security](https://apis.io/security/re-max/re-max-domain-security/)
 
-### RE/MAX Europe Listings API
+## Where to find this API
 
-The RE/MAX Europe Listings API is used in conjunction with the RE/MAX EU Datahub application to add, update, retrieve and delete property listing data and listing images across RE/MAX European regions. It exposes listings, listing images, listing entry logs, regions, offices and agents, plus convenience reads for listing countries and cities by country. Writes go through a queue with deferred validation. Like the Datahub API it is a proprietary REST schema with no RESO Data Dictionary alignment, no OData `$metadata` and no UPI. Authentication is OAuth 2.0 with the token supplied as an `access_token` query parameter. The only public documentation RE/MAX Europe publishes is for the STAGING environment, whose endpoints run on a third-party host (`bwscloud.tech`); no production base URL is published.
-
-- **Human URL:** [https://listingsapi-test.datahub.remax.eu/](https://listingsapi-test.datahub.remax.eu/)
-- **Base URL:** `https://listing-api-remaxeu.bwscloud.tech/api/v1`
-
-#### Tags
-
-- Property Listings
-- Images
-- Regions
-- Agents
-- Europe
-- Staging
-
-#### Properties
-
-- [Documentation](https://listingsapi-test.datahub.remax.eu/)
-- [Postman Collection](collections/re-max-eu-listings-api.postman_collection.json) — [Postman Collection 2.0](https://schema.getpostman.com/json/collection/v2.0.0/collection.json)
-
-## Common Properties
+Links to the company's own pages. This repository publishes no copy of their specifications — the canonical document is theirs and lives at the URLs below.
 
 - [Website](https://www.remax.com/)
-- [Website](https://www.remax.eu/)
-- [Blog](https://news.remax.com/)
-- [Investor Relations](https://investors.remaxholdings.com/)
-- [LinkedIn](https://www.linkedin.com/company/remax)
 - [Documentation](https://apidocs.datahub.remax.eu/)
-- [Authentication](https://oauth.datahub.remax.eu/token)
+- [Blog](https://news.remax.com/)
+- [Privacy policy](https://www.remax.eu/privacy-policy/)
 
-## RESO Posture and Access Gate
+## API Evangelist rating
 
-Certification is not reachability, and in RE/MAX's case there is not even certification.
+**Kin Score 18.8** — emerging · rubric 0.25.0 · scored 2026-10-23
 
-- **RESO posture:** RE/MAX is listed as a RESO **Class D Member (Brokers, Agents and Appraisers)** on `https://www.reso.org/membership/`, and RE/MAX holds a seat on the RESO Board of Directors (Joe Wilhelmy, VP of Business Technology, on the 2026 board). RE/MAX does **not** appear anywhere in the RESO certification directory at `https://www.reso.org/certificates/`, which lists 576 certified Data Provider organisations (all of them MLSs, associations and technology vendors). No RESO Web API endorsement, no Data Dictionary endorsement, no UOI, no `$metadata` document, and no Universal Property Identifier reference appears in any RE/MAX-published artifact.
-- **Access gate:** `partner-only`. The two documented APIs are RE/MAX Europe's, and their OAuth 2.0 client credentials are issued by RE/MAX Europe to regional master franchisees, offices and their vendors — the Postman documentation ships the literal client_id placeholder `Ask_REU`. There is no signup form, no key-request page and no published pricing. The United States arm publishes nothing at all.
-- **Open data:** None. RE/MAX publishes no open, unlicensed, publicly callable dataset. The listing content on remax.com is licensed MLS/IDX data.
-- **Auth model:** OAuth 2.0 authorization-code against `https://oauth.datahub.remax.eu/authorize` and `https://oauth.datahub.remax.eu/token`, with the access token then passed as an `access_token` **query parameter** on every request. No OpenID Connect discovery document is served (`/.well-known/openid-configuration` → 404).
-- **Home market:** United States (RE/MAX Holdings, Denver, Colorado). The only documented API surface is European.
+| Facet | Score |
+|---|---|
+| Discoverability | 80.0 |
+| Contract quality | 0.0 |
+| Contract governance | 18.2 |
+| Operational transparency | 0.0 |
+| Developer ergonomics | 47.0 |
+| Access clarity | 0.0 |
 
-See [review.yml](review.yml) for the full probe log with HTTP status codes.
+**Agent readiness 8.5** — agent-aware
+
+| Agent-readiness dimension | Result |
+|---|---|
+| Spec Presence | — |
+| Agentic Access | — |
+| Reversibility Documented | — |
+| MCP Server | platform (partial credit) |
+| Auth Clarity | bearer (partial credit) |
+| Idempotency | — |
+| Error Semantics | documented (partial credit) |
+| OpenAPI Examples | — |
+| Rate Limit Signal | — |
+| Event Surface Described | — |
+| Agent Skills | derived (partial credit) |
+| Well Known Catalog | — |
+| Consent Identity | — |
+| Agent Card | — |
+| Dry Run Mode | — |
+| Delegated Identity | — |
+| Protected Resource Metadata | — |
+| Dynamic Client Registration | — |
+| Agentic Commerce | — |
+| Pagination Ratio | na |
+| Operation Distinctiveness | na |
+
+**Regulatory alignment 15.7** — Securities & Market Data
+
+The rubric is published at [github.com/api-evangelist/kin-score](https://github.com/api-evangelist/kin-score). The per-check breakdown behind these numbers — which checks were earned, partial or missed — along with score history and how this provider compares to its peers, is available at [apis.io/providers/re-max/](https://apis.io/providers/re-max/).
+
+## How this profile is made
+
+API Evangelist profiles a company's public API surface the way a developer would find it: the website, developer portal and documentation, the specifications it publishes, its public repositories, and its pricing, status and changelog pages. From that it derives the properties above — contracts split per API, workflows, schemas, collections, governance rules, plans and rate limits — and scores them against the published [Kin Score rubric](https://github.com/api-evangelist/kin-score).
+
+The artifacts are published on [APIs.io](https://apis.io), not in this repository. This repository is the public record for RE/MAX: the place to say something is wrong, missing or out of date, and to ask for a re-score or a removal.
+
+## Open an issue
+
+- **Something about this listing** — a wrong description, a missing API, a stale artifact or a question about the rating: [open an issue on this repository](https://github.com/api-evangelist/re-max/issues/new).
+- **A new API, or one that is not in the catalog yet** — [submit it on APIs.io](https://apis.io/add/).
+- **Anything else** — [the APIs.io inbox](https://github.com/api-search/inbox/issues/new) or [info@apievangelist.com](mailto:info@apievangelist.com).
